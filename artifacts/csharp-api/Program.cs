@@ -15,6 +15,8 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddHostedService<MovieStartupService>();
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
