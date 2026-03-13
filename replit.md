@@ -21,7 +21,8 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 ```text
 artifacts-monorepo/
 ├── artifacts/              # Deployable applications
-│   └── api-server/         # Express API server
+│   ├── api-server/         # Express API server (Node.js, port 8080)
+│   └── csharp-api/         # ASP.NET Core Web API (C#, port 8000)
 ├── lib/                    # Shared libraries
 │   ├── api-spec/           # OpenAPI spec + Orval codegen config
 │   ├── api-client-react/   # Generated React Query hooks
@@ -49,6 +50,18 @@ Every package extends `tsconfig.base.json` which sets `composite: true`. The roo
 - `pnpm run typecheck` — runs `tsc --build --emitDeclarationOnly` using project references
 
 ## Packages
+
+### `artifacts/csharp-api` (C# ASP.NET Core Web API)
+
+ASP.NET Core 9 Web API using .NET 9. Controllers live in `Controllers/`.
+
+- Entry: `Program.cs` — configures services, reads `PORT` env var, starts Kestrel
+- Controllers: `Controllers/HealthController.cs` (`GET /health`), `Controllers/WeatherForecastController.cs` (`GET /weatherforecast`)
+- Swagger UI: `/swagger` (interactive API docs in development)
+- Swagger JSON: `/swagger/v1/swagger.json`
+- Port: `8000` (set via `PORT` environment variable)
+- Run: `cd artifacts/csharp-api && PORT=8000 ASPNETCORE_ENVIRONMENT=Development dotnet run --no-launch-profile`
+- Build: `cd artifacts/csharp-api && dotnet build`
 
 ### `artifacts/api-server` (`@workspace/api-server`)
 

@@ -1,4 +1,4 @@
-modules = ["nodejs-24"]
+modules = ["nodejs-24", "dotnet-9.0"]
 
 [[artifacts]]
 id = "artifacts/api-server"
@@ -16,6 +16,27 @@ env = { "CI" = "true" }
 
 [workflows]
 runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "C# API Server"
+
+[[workflows.workflow]]
+name = "C# API Server"
+author = "agent"
+
+[workflows.workflow.metadata]
+outputType = "console"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd artifacts/csharp-api && PORT=8000 ASPNETCORE_ENVIRONMENT=Development dotnet run --no-launch-profile"
+waitForPort = 8000
 
 [agent]
 stack = "PNPM_WORKSPACE"
